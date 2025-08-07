@@ -9,7 +9,7 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
   },
-  base: "https://github.com/AashutoshAgrawal/persona-pulse",
+  base: "/persona-pulse/",
   plugins: [
     react(),
     mode === 'development' &&
