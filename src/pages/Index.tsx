@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Onboarding from "@/components/Onboarding";
 import PersonaScreen from "@/components/PersonaScreen";
@@ -39,30 +39,8 @@ const Index = () => {
   const [currentScreen, setCurrentScreen] = useState<AppScreen>("onboarding");
   const [persona, setPersona] = useState<PersonaData | null>(null);
   const [selectedBook, setSelectedBook] = useState<AudioBook | null>(null);
-  const [showAdminButton, setShowAdminButton] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
-
-  // Admin access: Press 'A' + 'D' + 'M' keys in sequence
-  useEffect(() => {
-    let keySequence = '';
-    const handleKeyPress = (e: KeyboardEvent) => {
-      keySequence += e.key.toLowerCase();
-      if (keySequence.includes('adm')) {
-        setShowAdminButton(true);
-        keySequence = '';
-        toast({
-          title: "🔐 Admin Access Enabled",
-          description: "Analytics dashboard is now accessible",
-        });
-      }
-      // Reset sequence after 3 seconds
-      setTimeout(() => { keySequence = ''; }, 3000);
-    };
-
-    window.addEventListener('keypress', handleKeyPress);
-    return () => window.removeEventListener('keypress', handleKeyPress);
-  }, [toast]);
 
   const handleOnboardingComplete = (newPersona: PersonaData) => {
     setPersona(newPersona);
@@ -143,18 +121,16 @@ const Index = () => {
     <div className="min-h-screen relative">
       {renderScreen()}
       
-      {/* Admin Access Button - Only visible after key sequence */}
-      {showAdminButton && (
-        <Button
-          onClick={() => navigate('/dashboard')}
-          variant="outline"
-          size="sm"
-          className="fixed bottom-4 right-4 bg-card/80 backdrop-blur-sm border-primary/20 hover:bg-primary/10 z-50"
-        >
-          <BarChart3 className="h-4 w-4 mr-2" />
-          Analytics
-        </Button>
-      )}
+      {/* Analytics Access Button - Always visible */}
+      <Button
+        onClick={() => navigate('/dashboard')}
+        variant="outline"
+        size="sm"
+        className="fixed bottom-4 right-4 bg-card/80 backdrop-blur-sm border-primary/20 hover:bg-primary/10 z-50"
+      >
+        <BarChart3 className="h-4 w-4 mr-2" />
+        Analytics
+      </Button>
     </div>
   );
 };
